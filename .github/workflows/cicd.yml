@@ -1,6 +1,6 @@
-name: Deploy Node Application
+name: Trigger Github Actions
 
-on: 
+on:
   push:
     branches:
       - main
@@ -12,21 +12,21 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v4
       - name: Login to Docker Hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}     
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build Docker Image
         run: |
-          docker build -t amadatech/lib .
-          docker images 
+          docker build -t amadatech/lib -f Dockerfile .
+          docker images
       - name: Publish Image to Docker Hub
         run: docker push amadatech/lib:latest
 
   deploy:
     needs: build
-    runs-on: self-hosted 
+    runs-on: self-hosted
     steps:
       - name: Pull image from Docker Hub
-        run: docker pull amadatech/lib:latest 
+        run: docker pull amadatech/lib:latest
       - name: Delete old container
-        run: docker rm -f lib-container  
+        run: docker rm -f lib-container
       - name: Run Docker Container
         run: docker run -d -p 3001:3001 --name lib-container -e MONGO_PASSWORD='${{ secrets.MONGO_PASSWORD }}' amadatech/lib
