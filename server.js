@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const sgMail = require('@sendgrid/mail');
-const stripeFunctions = require('./stripe');
 const User = require('./models/userSchema');
 const Event = require('./models/eventSchema');
 const Activity = require('./models/activitySchema');
