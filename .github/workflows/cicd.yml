@@ -11,19 +11,20 @@ jobs:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
-      - name: Login to docker hub
+      - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}     
       - name: Build Docker Image
-        run: docker build -t amadatech/lib  .
-      - name: Publish Image to docker hub
-        run: docker push amadatech/lib:latest 
- 
-        
+        run: |
+          docker build -t amadatech/lib .
+          docker images  # Optional: Print the list of images for debugging
+      - name: Publish Image to Docker Hub
+        run: docker push amadatech/lib:latest
+
   deploy:
     needs: build
     runs-on: self-hosted 
     steps:
-      - name: Pull image from docker hub
+      - name: Pull image from Docker Hub
         run: docker pull amadatech/lib:latest 
       - name: Delete old container
         run: docker rm -f lib-container  
