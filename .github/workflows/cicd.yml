@@ -16,7 +16,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build -t amadatech/lib .
-          docker images  # Optional: Print the list of images for debugging
+          docker images 
       - name: Publish Image to Docker Hub
         run: docker push amadatech/lib:latest
 
