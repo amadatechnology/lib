@@ -18,6 +18,8 @@ jobs:
       - name: Publish Image to Docker Hub
         run: docker push amadatech/lib:latest
 
+
+        #Nothing Else
   deploy:
     needs: build
     runs-on: self-hosted
