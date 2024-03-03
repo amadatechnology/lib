@@ -11,21 +11,52 @@ jobs:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
-      - name: Login to Docker Hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build Docker Image
-        run: docker build -t amadatech/lib  .
-      - name: Publish Image to Docker Hub
-        run: docker push amadatech/lib:latest
 
+      - name: Login to Docker Hub
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          if [ $? -ne 0 ]; then
+            echo "Docker login failed"
+            exit 1
+          fi
+
+      - name: Build Docker Image
+        run: |
+          docker build -t amadatech/lib .
+          if [ $? -ne 0 ]; then
+            echo "Docker build failed"
+            exit 1
+          fi
+
+      - name: Publish Image to Docker Hub
+        run: |
+          docker push amadatech/lib:latest
+          if [ $? -ne 0 ]; then
+            echo "Docker push failed"
+            exit 1
+          fi
 
   deploy:
     needs: build
     runs-on: self-hosted
     steps:
       - name: Pull image from Docker Hub
-        run: docker pull amadatech/lib:latest
+        run: |
+          docker pull amadatech/lib:latest
+          if [ $? -ne 0 ]; then
+            echo "Docker pull failed"
+            exit 1
+          fi
+
       - name: Delete old container
-        run: docker rm -f lib-container
+        run: |
+          docker rm -f lib-container || true
+          # Using '|| true' to ignore errors if the container doesn't exist
+
       - name: Run Docker Container
-        run: docker run -d -p 3001:3001 --name lib-container -e MONGODB_URI='${{ secrets.MONGODB_URI }}' amadatech/lib
+        run: |
+          docker run -d -p 3001:3001 --name lib-container -e MONGODB_URI="${{ secrets.MONGODB_URI }}" amadatech/lib
+          if [ $? -ne 0 ]; then
+            echo "Docker run failed"
+            exit 1
+          fi
