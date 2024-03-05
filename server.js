@@ -13,7 +13,10 @@ const Activity = require('./models/activitySchema');
 
 const app = express();
 const bodyParser = require('body-parser');
-app.use(cors());
+
+
+
+
 
 
 app.use((_req, res, next) => {
@@ -778,5 +781,5 @@ app.put('/profile/settings/security', authenticateToken, async (req, res) => {
 
 
 
-const PORT = process.env.PORT || 3001;
+const PORT = 3001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
