@@ -13,7 +13,7 @@ const Activity = require('./models/activitySchema');
 
 
 const bodyParser = require('body-parser');
-
+app.use(cors());
 const app = express();
 
 app.use((_req, res, next) => {
