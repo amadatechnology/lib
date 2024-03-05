@@ -8,7 +8,7 @@ const sgMail = require('@sendgrid/mail');
 const User = require('./models/userSchema');
 const Event = require('./models/eventSchema');
 const Activity = require('./models/activitySchema');
-import bodyParser from 'body-parser';
+
 
 
 
