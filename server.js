@@ -11,10 +11,10 @@ const Activity = require('./models/activitySchema');
 
 
 
-
+const app = express();
 const bodyParser = require('body-parser');
 app.use(cors());
-const app = express();
+
 
 app.use((_req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
