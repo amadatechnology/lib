@@ -15,10 +15,16 @@ const Activity = require('./models/activitySchema');
 
 const app = express();
 
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true,
-}));
+app.use((_req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+
+  next();
+});
+
+// Parses the text as url encoded data
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
